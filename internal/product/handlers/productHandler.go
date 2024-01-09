@@ -61,19 +61,15 @@ func (p *Product) UnmarshalJSON(data []byte) error {
 }
 
 func (ps *ProductsMap) LoadProducts() (*ProductsMap, error) {
-	file, err := os.Open("./products.json")
+	file, err := os.ReadFile("./products.json")
 
 	if err != nil {
 		return nil, errors.New(err.Error())
 	}
 
-	defer file.Close()
-
-	decoder := json.NewDecoder(file)
-
 	products := make([]Product, 0)
 
-	if err := decoder.Decode(&products); err != nil {
+	if err := json.Unmarshal(file, &products); err != nil {
 		return nil, errors.New(err.Error())
 	}
 
